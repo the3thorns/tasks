@@ -20,7 +20,22 @@ public class task {
         return deadline;
     }
 
+    private int biggestLenght(){
+        return Math.max(Math.max(title.length() + 8, description.length() + 13), deadline.toString().length() + 7);
+    }
+
     public String toString(){
-        return ""; //Añadir
+        String res = "";
+        int biggest = biggestLenght();
+        for (int i = 0; i < biggest + 4; i++) {
+            res+="*";
+        }
+        res+="\n";
+        res+= String.format("| TITLE: %-" + (biggest -7)  +"s |\n", title) +
+                String.format("| DESCRIPTION: %-"+ (biggest - 13) + "s |\n", description) +
+                String.format("| DATE: %-" + (biggest - 6) + "s |\n", deadline.toString()) +
+                res;
+
+        return res;
     }
 }
