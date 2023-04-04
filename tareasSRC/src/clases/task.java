@@ -1,13 +1,12 @@
 package clases;
 
 public class task {
-    private String title, description, objectives;
+    private String title, description;
     private date deadline;
 
-    public task(String title, String description, String objectives, date deadline){
+    public task(String title, String description, date deadline){
         this.title = title;
         this.description = description;
-        this. objectives = objectives;
         this.deadline = deadline;
     }
 
@@ -16,9 +15,6 @@ public class task {
     }
     public String getDescription() {
         return description;
-    }
-    public String getObjectives() {
-        return objectives;
     }
     public date getDeadline() {
         return deadline;
