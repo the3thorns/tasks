@@ -3,11 +3,13 @@ package clases;
 public class task {
     private String title, description;
     private date deadline;
+    private int priority;
 
-    public task(String title, String description, date deadline){
+    public task(String title, String description, date deadline, int priority){
         this.title = title;
         this.description = description;
         this.deadline = deadline;
+        this.priority = priority;
     }
 
     public String getTitle() {
@@ -18,6 +20,9 @@ public class task {
     }
     public date getDeadline() {
         return deadline;
+    }
+    public int getPriority() {
+        return priority;
     }
 
     private int biggestLenght(){
@@ -30,11 +35,10 @@ public class task {
         for (int i = 0; i < biggest + 4; i++) {
             res+="*";
         }
-        res+="\n";
-        res+= String.format("| TITLE: %-" + (biggest -7)  +"s |\n", title) +
+        res+= "\n" + String.format("| TITLE: %-" + (biggest -7)  +"s |\n", title) +
                 String.format("| DESCRIPTION: %-"+ (biggest - 13) + "s |\n", description) +
                 String.format("| DATE: %-" + (biggest - 6) + "s |\n", deadline.toString()) +
-                res;
+                res + "\n\n";
 
         return res;
     }
