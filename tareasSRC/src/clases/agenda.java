@@ -16,7 +16,6 @@ public class agenda {
         tasks = new task[len];
         nTasks = 0;
     }
-
     public void add(task t){
         if (nTasks == tasks.length){
             task[] n = new task[tasks.length * 2];
@@ -28,7 +27,6 @@ public class agenda {
         tasks[nTasks] = t;
         nTasks++;
     }
-
     public void delete(int pos){
         task[] aux = new task[tasks.length];
         int auxPos = 0;
@@ -41,14 +39,20 @@ public class agenda {
         }
         tasks = aux;
     }
-
+    public task getTask(int pos)
+            throws TaskDoesNotExistException {
+        if (tasks[pos] == null || pos >= nTasks)
+            throw new TaskDoesNotExistException();
+        return tasks[pos];
+    }
     public String toString(){
         String c = "";
         for (int i = 0; i < nTasks; i++) {
-            c += tasks[i].toString();
+            c+= String.format("| #%d -> %s: DEADLINE: %S |", tasks[i].getPriority(), tasks[i].getTitle(), tasks[i].getDeadline().toString());
         }
         return c;
     }
+
     /**
      *      DATA.TXT FORMAT
      * __nTasks__       (int)
