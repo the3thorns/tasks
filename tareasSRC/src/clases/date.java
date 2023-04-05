@@ -8,7 +8,6 @@ public class date {
         this.month = month;
         this.year = year;
     }
-
     public int getDay() {
         return day;
     }

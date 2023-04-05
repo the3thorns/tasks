@@ -24,6 +24,9 @@ public class task {
     public int getPriority() {
         return priority;
     }
+    public void setPriority(int n){
+        priority = n;
+    }
 
     private int biggestLenght(){
         return Math.max(Math.max(title.length() + 8, description.length() + 13), deadline.toString().length() + 7);

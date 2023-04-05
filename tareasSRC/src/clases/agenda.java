@@ -1,6 +1,7 @@
 package clases;
 
 import clases.exceptions.CorruptedAgendaException;
+import clases.exceptions.PriorityConflictException;
 import clases.exceptions.TaskDoesNotExistException;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +12,6 @@ import java.util.Scanner;
 public class agenda {
     private task[] tasks;
     private int nTasks;
-
     public agenda(){
         tasks = new task[10];
         nTasks = 0;
@@ -20,15 +20,18 @@ public class agenda {
         tasks = new task[len];
         nTasks = 0;
     }
-    public void add(task t){
+    public void add(task t)
+            throws PriorityConflictException {
+        if (tasks[t.getPriority() - 1] != null)
+            throw new PriorityConflictException();
         if (nTasks == tasks.length){
-            task[] n = new task[tasks.length * 2];
+            task[] n = new task[tasks.length + 1];
             for (int i = 0; i < nTasks; i++) {
                 n[i] = tasks[i];
             }
             tasks = n;
         }
-        tasks[nTasks] = t;
+        tasks[t.getPriority() - 1] = t;
         nTasks++;
     }
     public void delete(int pos){
@@ -49,30 +52,27 @@ public class agenda {
             throw new TaskDoesNotExistException();
         return tasks[pos];
     }
+    public int getLength(){
+        return tasks.length;
+    }
+    public void changePriority(int prior1, int prior2) {
+        tasks[prior1 - 1].setPriority(prior2);
+        tasks[prior2 - 1].setPriority(prior1);
+        task aux = tasks[prior1 - 1];
+        tasks[prior1 - 1] = tasks[prior2 - 1];
+        tasks[prior2 - 1] = aux;
+    }
     public int getNTasks(){
         return nTasks;
     }
     public String toString(){
         String c = "";
         for (int i = 0; i < nTasks; i++) {
-            c+= String.format("| #%d -> %s: DEADLINE: %S |", tasks[i].getPriority(), tasks[i].getTitle(), tasks[i].getDeadline().toString());
+            if (tasks[i] != null)
+                c+= String.format("| #%d -> %s: DEADLINE: %S |  ", tasks[i].getPriority(), tasks[i].getTitle(), tasks[i].getDeadline().toString());
         }
         return c;
     }
-    /**
-     *      DATA.TXT FORMAT
-     * __nTasks__       (int) -> Deprecated
-     *    SPECIFIC TASK FORMAT
-     * **************************
-     *| __priority__    (int)   |
-     *|__title__        (String)|
-     *| __description__ (String)|
-     *| __day__         (int)   |
-     *| __month__       (int)   |
-     *| __year__        (int)   |
-     * **************************
-     *
-     */
     public static void create(String route){
         try{
             File obj = new File(route);
@@ -84,7 +84,7 @@ public class agenda {
     }
     public void load(String route)
             throws FileNotFoundException,
-            CorruptedAgendaException {
+            CorruptedAgendaException, PriorityConflictException {
         Scanner scanner = new Scanner(new File(route));
 
         String title, desc;
@@ -118,7 +118,6 @@ public class agenda {
     }
     public void save(String route) {
         String c = "";
-        c+= nTasks + "\n";
         for (int i = 0; i < nTasks; i++) {
             c += String.format("%d\n%s\n%s\n%d\n%d\n%d\n",tasks[i].getPriority(),tasks[i].getTitle(), tasks[i].getDescription(),
                     tasks[i].getDeadline().getDay(),tasks[i].getDeadline().getMonth(), tasks[i].getDeadline().getYear());
@@ -133,4 +132,18 @@ public class agenda {
 
 
     }
+    /**
+     *      DATA.TXT FORMAT
+     * __nTasks__       (int) -> Deprecated
+     *    SPECIFIC TASK FORMAT
+     * **************************
+     *| __priority__    (int)   |
+     *|__title__        (String)|
+     *| __description__ (String)|
+     *| __day__         (int)   |
+     *| __month__       (int)   |
+     *| __year__        (int)   |
+     * **************************
+     *
+     */
 }
