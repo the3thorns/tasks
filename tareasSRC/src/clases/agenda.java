@@ -2,6 +2,8 @@ package clases;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class agenda {
@@ -44,6 +46,9 @@ public class agenda {
         if (tasks[pos] == null || pos >= nTasks)
             throw new TaskDoesNotExistException();
         return tasks[pos];
+    }
+    public int getNTasks(){
+        return nTasks;
     }
     public String toString(){
         String c = "";
@@ -99,5 +104,23 @@ public class agenda {
         }
         scanner.close();
         return res;
+    }
+
+    public void save(String route) {
+        String c = "";
+        c+= nTasks + "\n";
+        for (int i = 0; i < nTasks; i++) {
+            c += String.format("%d\n%s\n%s\n%d\n%d\n%d\n",tasks[i].getPriority(),tasks[i].getTitle(), tasks[i].getDescription(),
+                    tasks[i].getDeadline().getDay(),tasks[i].getDeadline().getMonth(), tasks[i].getDeadline().getYear());
+        }
+        try{
+            FileWriter saver = new FileWriter(route);
+            saver.write(c);
+            saver.close();
+        }catch (IOException e) {
+            System.out.println("An error occurred");
+        }
+
+
     }
 }
