@@ -1,4 +1,4 @@
-package clases;
+package clases.exceptions;
 
 public class TaskDoesNotExistException extends Exception {
 }

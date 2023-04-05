@@ -1,5 +1,7 @@
 package clases;
 
+import clases.exceptions.CorruptedAgendaException;
+import clases.exceptions.TaskDoesNotExistException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -57,10 +59,9 @@ public class agenda {
         }
         return c;
     }
-
     /**
      *      DATA.TXT FORMAT
-     * __nTasks__       (int)
+     * __nTasks__       (int) -> Deprecated
      *    SPECIFIC TASK FORMAT
      * **************************
      *| __priority__    (int)   |
@@ -72,17 +73,28 @@ public class agenda {
      * **************************
      *
      */
-
-    public static agenda create(String route)
-            throws FileNotFoundException {
+    public static void create(String route){
+        try{
+            File obj = new File(route);
+            if (obj.createNewFile())
+                System.out.println("New agenda created!!");
+        }catch (IOException e){
+            System.out.println("An error occurred");
+        }
+    }
+    public void load(String route)
+            throws FileNotFoundException,
+            CorruptedAgendaException {
         Scanner scanner = new Scanner(new File(route));
-        agenda res = new agenda(scanner.nextInt());
 
         String title, desc;
         int prior, day, month, year;
+
         while (scanner.hasNext()){
             prior = scanner.nextInt();
             scanner.nextLine();
+            if (tasks[prior + 1] != null)
+                throw new CorruptedAgendaException();
             //System.out.println(prior);
             title = scanner.next();
             scanner.nextLine();
@@ -100,12 +112,10 @@ public class agenda {
 
             date d = new date(day, month, year);
             task t = new task(title, desc, d, prior);
-            res.add(t);
+            this.add(t);
         }
         scanner.close();
-        return res;
     }
-
     public void save(String route) {
         String c = "";
         c+= nTasks + "\n";

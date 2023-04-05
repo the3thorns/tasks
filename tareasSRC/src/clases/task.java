@@ -38,7 +38,7 @@ public class task {
         res+= "\n" + String.format("| TITLE: %-" + (biggest -7)  +"s |\n", title) +
                 String.format("| DESCRIPTION: %-"+ (biggest - 13) + "s |\n", description) +
                 String.format("| DATE: %-" + (biggest - 6) + "s |\n", deadline.toString()) +
-                res + "\n\n";
+                res + "\n";
 
         return res;
     }
