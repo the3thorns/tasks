@@ -38,13 +38,20 @@ public class agenda {
         task[] aux = new task[tasks.length];
         int auxPos = 0;
         for (int i = 0; i < nTasks; i++) {
-            if (i == pos){
-                continue;
+            if (i != pos) {
+                aux[auxPos] = tasks[i];
+                auxPos++;
             }
-            aux[i] = tasks[i];
-            auxPos++;
         }
         tasks = aux;
+    }
+    public String showAviablePriorities(){
+        String c = "";
+        for (int i = 0; i < tasks.length; i++) {
+            if (tasks[i] == null)
+                c+= String.format("%d ", i);
+        }
+        return c;
     }
     public task getTask(int pos)
             throws TaskDoesNotExistException {

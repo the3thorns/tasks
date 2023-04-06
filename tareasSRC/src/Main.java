@@ -14,18 +14,21 @@ public class Main {
         int d, m, a, prior;
         System.out.println("Inserta la prioridad de tu tarea: ");
         prior = creator.nextInt();
+        creator.nextLine();
         System.out.println("Inserta un título para la tarea: ");
         t = creator.nextLine();
         System.out.println("Inserta una descripción: ");
         des = creator.nextLine();
-        System.out.println("Inserta la fecha");
+        System.out.println("\nInserta la fecha");
         System.out.println("Día: ");
         d = creator.nextInt();
+        creator.nextLine();
         System.out.println("Mes: ");
         m = creator.nextInt();
+        creator.nextLine();
         System.out.println("Año: ");
         a = creator.nextInt();
-        creator.close();
+        creator.nextLine();
 
         date dat = new date(d, m, a);
         task tas = new task(t, des, dat, prior);
@@ -33,7 +36,7 @@ public class Main {
             agen.add(tas);
         }catch (PriorityConflictException e){
             System.out.println("// CONFLICTO DE PRIORIDADES DETECTADO //");
-            System.out.println("// ANULANDO OPERACIÓN //");
+            System.out.println("// ANULANDO OPERACIÓN //\n");
         }
     }
     public static void agendaWorkOpen(String ag)
@@ -55,7 +58,7 @@ public class Main {
             System.out.println("\t4- Añadir tarea (+)");
             System.out.println("\t5- Finalizar tarea (-)");
             System.out.println("\t6- Guardar y cerrar agenda ←");
-            System.out.println("»»»»»»\t");
+            System.out.print("»»»»»»\t");
             workEntry = work.nextInt();
 
             switch (workEntry) {
@@ -67,19 +70,14 @@ public class Main {
                     System.out.println(a.getTask(work.nextInt() - 1));
                     break;
                 case 3:
-                    System.out.println(String.format("Número de prioridades disponibles: %d", a.getLength()));
-                    System.out.println("Inserta prioridad de la tarea: ");
-                    pr1 = work.nextInt();
-                    System.out.println("Inserta la nueva prioridad: ");
-                    pr2 = work.nextInt();
-                    a.changePriority(pr1, pr2);
+
                     break;
                 case 4:
-                    taskCreatorWizard(a); //NO CAPTA EL TÍTULO
+                    taskCreatorWizard(a);
                     break;
                 case 5:
                     System.out.println("Inserta prioridad de la tarea: ");
-                    a.delete(work.nextInt());
+                    a.delete(work.nextInt()); //no funciona
                     break;
             }
         }
@@ -114,10 +112,10 @@ public class Main {
                     agendaWorkOpen(entry.next());
                     break;
                 case 3:
-                    System.out.println("WORK IN PROGRESS");
+                    System.out.println("WORK IN PROGRESS");     //Crear agenda
                     break;
                 case 4:
-                    System.out.println("WORK IN PROGRESS");
+                    System.out.println("WORK IN PROGRESS");     //Borrar agenda
                     break;
             }
         }
