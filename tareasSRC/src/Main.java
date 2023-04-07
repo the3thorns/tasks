@@ -11,10 +11,7 @@ public class Main {
     public static void taskCreatorWizard(agenda agen){
         Scanner creator = new Scanner(System.in);
         String t, des;
-        int d, m, a, prior;
-        System.out.println("Inserta la prioridad de tu tarea: ");
-        prior = creator.nextInt();
-        creator.nextLine();
+        int d, m, a;
         System.out.println("Inserta un título para la tarea: ");
         t = creator.nextLine();
         System.out.println("Inserta una descripción: ");
@@ -31,7 +28,7 @@ public class Main {
         creator.nextLine();
 
         date dat = new date(d, m, a);
-        task tas = new task(t, des, dat, prior);
+        task tas = new task(t, des, dat);
         try {
             agen.add(tas);
         }catch (PriorityConflictException e){
@@ -64,6 +61,7 @@ public class Main {
             switch (workEntry) {
                 case 1:
                     System.out.println(a);
+                    System.out.println("Número de tareas: " + a.getNTasks());
                     break;
                 case 2:
                     System.out.println("Inserta prioridad de la tarea: ");
@@ -76,8 +74,8 @@ public class Main {
                     taskCreatorWizard(a);
                     break;
                 case 5:
-                    System.out.println("Inserta prioridad de la tarea: ");
-                    a.delete(work.nextInt()); //no funciona
+                    System.out.println("Inserta posición de la tarea: ");
+                    a.delete(work.nextInt() - 1); //no funciona
                     break;
             }
         }
@@ -112,7 +110,8 @@ public class Main {
                     agendaWorkOpen(entry.next());
                     break;
                 case 3:
-                    System.out.println("WORK IN PROGRESS");     //Crear agenda
+                    System.out.println("Introduce el nombre de la agenda: ");
+                    agenda.create("/home/the3thorns/Escritorio/tasks/agendaData/" + entry.next() + ".txt");
                     break;
                 case 4:
                     System.out.println("WORK IN PROGRESS");     //Borrar agenda

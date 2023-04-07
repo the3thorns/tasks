@@ -22,8 +22,6 @@ public class agenda {
     }
     public void add(task t)
             throws PriorityConflictException {
-        if (tasks[t.getPriority() - 1] != null)
-            throw new PriorityConflictException();
         if (nTasks == tasks.length){
             task[] n = new task[tasks.length + 1];
             for (int i = 0; i < nTasks; i++) {
@@ -31,7 +29,7 @@ public class agenda {
             }
             tasks = n;
         }
-        tasks[t.getPriority() - 1] = t;
+        tasks[nTasks] = t;
         nTasks++;
     }
     public void delete(int pos){
@@ -44,14 +42,7 @@ public class agenda {
             }
         }
         tasks = aux;
-    }
-    public String showAviablePriorities(){
-        String c = "";
-        for (int i = 0; i < tasks.length; i++) {
-            if (tasks[i] == null)
-                c+= String.format("%d ", i);
-        }
-        return c;
+        nTasks--;
     }
     public task getTask(int pos)
             throws TaskDoesNotExistException {
@@ -62,13 +53,6 @@ public class agenda {
     public int getLength(){
         return tasks.length;
     }
-    public void changePriority(int prior1, int prior2) {
-        tasks[prior1 - 1].setPriority(prior2);
-        tasks[prior2 - 1].setPriority(prior1);
-        task aux = tasks[prior1 - 1];
-        tasks[prior1 - 1] = tasks[prior2 - 1];
-        tasks[prior2 - 1] = aux;
-    }
     public int getNTasks(){
         return nTasks;
     }
@@ -76,7 +60,7 @@ public class agenda {
         String c = "";
         for (int i = 0; i < nTasks; i++) {
             if (tasks[i] != null)
-                c+= String.format("| #%d -> %s: DEADLINE: %S |  ", tasks[i].getPriority(), tasks[i].getTitle(), tasks[i].getDeadline().toString());
+                c+= String.format("| #%d -> %s: DEADLINE: %S |  ", i + 1, tasks[i].getTitle(), tasks[i].getDeadline().toString());
         }
         return c;
     }
@@ -84,24 +68,21 @@ public class agenda {
         try{
             File obj = new File(route);
             if (obj.createNewFile())
-                System.out.println("New agenda created!!");
+                System.out.println("La agenda se ha creado con éxito!!");
         }catch (IOException e){
-            System.out.println("An error occurred");
+            System.out.println("Se ha producido un error, vuélvelo a intentar");
         }
     }
     public void load(String route)
             throws FileNotFoundException,
-            CorruptedAgendaException, PriorityConflictException {
+            CorruptedAgendaException,
+            PriorityConflictException {
         Scanner scanner = new Scanner(new File(route));
 
         String title, desc;
-        int prior, day, month, year;
+        int day, month, year;
 
         while (scanner.hasNext()){
-            prior = scanner.nextInt();
-            scanner.nextLine();
-            if (tasks[prior + 1] != null)
-                throw new CorruptedAgendaException();
             //System.out.println(prior);
             title = scanner.next();
             scanner.nextLine();
@@ -118,7 +99,7 @@ public class agenda {
             //System.out.println(year);
 
             date d = new date(day, month, year);
-            task t = new task(title, desc, d, prior);
+            task t = new task(title, desc, d);
             this.add(t);
         }
         scanner.close();
@@ -126,8 +107,10 @@ public class agenda {
     public void save(String route) {
         String c = "";
         for (int i = 0; i < nTasks; i++) {
-            c += String.format("%d\n%s\n%s\n%d\n%d\n%d\n",tasks[i].getPriority(),tasks[i].getTitle(), tasks[i].getDescription(),
-                    tasks[i].getDeadline().getDay(),tasks[i].getDeadline().getMonth(), tasks[i].getDeadline().getYear());
+            if (tasks[i] != null) {
+                c += String.format("%s\n%s\n%d\n%d\n%d\n", tasks[i].getTitle(), tasks[i].getDescription(),
+                        tasks[i].getDeadline().getDay(), tasks[i].getDeadline().getMonth(), tasks[i].getDeadline().getYear());
+            }
         }
         try{
             FileWriter saver = new FileWriter(route);
@@ -136,9 +119,8 @@ public class agenda {
         }catch (IOException e) {
             System.out.println("An error occurred");
         }
-
-
     }
+
     /**
      *      DATA.TXT FORMAT
      * __nTasks__       (int) -> Deprecated

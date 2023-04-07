@@ -3,14 +3,11 @@ package clases;
 public class task {
     private String title, description;
     private date deadline;
-    private int priority;
 
-    public task(String title, String description, date deadline, int priority){
+    public task(String title, String description, date deadline){
         this.title = title;
         this.description = description;
-        this.deadline = deadline;
-        this.priority = priority;
-    }
+        this.deadline = deadline;}
 
     public String getTitle() {
         return title;
@@ -20,12 +17,6 @@ public class task {
     }
     public date getDeadline() {
         return deadline;
-    }
-    public int getPriority() {
-        return priority;
-    }
-    public void setPriority(int n){
-        priority = n;
     }
 
     private int biggestLenght(){
