@@ -73,6 +73,13 @@ public class agenda {
             System.out.println("Se ha producido un error, vuélvelo a intentar");
         }
     }
+    public static void delete(String route){
+        File obj = new File(route);
+        if (obj.delete())
+            System.out.println("La agenda en la ruta: " + route + " se ha eliminado con éxito");
+        else
+            System.out.println("Se ha producio un error, vuélvalo a intentar");
+    }
     public void load(String route)
             throws FileNotFoundException,
             CorruptedAgendaException,

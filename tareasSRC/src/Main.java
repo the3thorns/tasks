@@ -4,7 +4,10 @@ import clases.exceptions.CorruptedAgendaException;
 import clases.exceptions.PriorityConflictException;
 import clases.exceptions.TaskDoesNotExistException;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -38,13 +41,16 @@ public class Main {
     }
     public static void agendaWorkOpen(String ag)
             throws CorruptedAgendaException,
-            FileNotFoundException,
+            IOException,
             TaskDoesNotExistException,
             PriorityConflictException {
         Scanner work = new Scanner(System.in);
         int workEntry = 0;
         int pr1, pr2;
         System.out.println("//ABRIENDO//");
+        FileWriter last = new FileWriter("/home/the3thorns/Escritorio/tasks/last/lastAgenda.txt");
+        last.write(ag);
+        last.close();
         agenda a = new agenda();
         a.load("/home/the3thorns/Escritorio/tasks/agendaData/" + ag + ".txt");
         System.out.println("//AGENDA ABIERTA SIN ERRORES//\n");
@@ -83,7 +89,7 @@ public class Main {
         a.save("/home/the3thorns/Escritorio/tasks/agendaData/" + ag + ".txt");
     }
     public static void main(String[] args)
-            throws FileNotFoundException,
+            throws IOException,
             TaskDoesNotExistException,
             CorruptedAgendaException,
             PriorityConflictException {
@@ -102,8 +108,8 @@ public class Main {
             userEntry = entry.nextInt();
             switch (userEntry) {
                 case 1:
-                    System.out.println("WORK IN PROGRESS");
-                    agendaWorkOpen("");     //Implementar última agenda abierta Ub: ultimaagenda.txt
+                    Scanner last = new Scanner(new File("/home/the3thorns/Escritorio/tasks/last/lastAgenda.txt"));
+                    agendaWorkOpen(last.next());
                     break;
                 case 2:
                     System.out.println("¿Qué agenda quieres abrir?");
@@ -114,7 +120,8 @@ public class Main {
                     agenda.create("/home/the3thorns/Escritorio/tasks/agendaData/" + entry.next() + ".txt");
                     break;
                 case 4:
-                    System.out.println("WORK IN PROGRESS");     //Borrar agenda
+                    System.out.println("Introduce el nombre de la agenda a borrar: ");
+                    agenda.delete("/home/the3thorns/Escritorio/tasks/agendaData/" + entry.next() + ".txt");
                     break;
             }
         }
